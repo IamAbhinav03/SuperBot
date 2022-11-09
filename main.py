@@ -1,5 +1,6 @@
 import os
 import discord
+import spotipy
 import text2emotion as te
 from dotenv import load_dotenv
 from discord.ext import commands
@@ -7,6 +8,8 @@ from discord.ext import commands
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
+
+SPOTIFY_API = "https://api.spotify.com/v1/"
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -39,7 +42,9 @@ async def ping(ctx):
     help="Recomends a music by analysing the emotion in the corresponding text"
     )
 async def recommend(ctx, text: str):
+    print(text)
     emotion = te.get_emotion(text)
+    print(emotion)
     max = -1
     detected_emotion = None
     for k, v in emotion.items():
@@ -48,17 +53,16 @@ async def recommend(ctx, text: str):
             detected_emotion = k
     match detected_emotion:
         case "Angry":
-            pass
+
+            await ctx.send("I sense you are angry")
         case "Fear":
-            pass
+            await ctx.send("I sense you are afraid of something")
         case "Happy":
-            pass
+            await ctx.send("I sense you are Happy!!")
         case "Sad":
-            pass
-        case "Surprise":
-            pass
+            await ctx.send("I sense you are Sad")
         case default:
-            pass
+            await ctx.send("I sense you are Surprised")
     pass
 
 
