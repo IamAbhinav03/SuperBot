@@ -9,12 +9,16 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from dotenv import load_dotenv
 from discord.ext import commands
 
+# accessing env keys from .env file
+# load_dotenv()
+# TOKEN = os.getenv("DISCORD_TOKEN")
+# SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
+# SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
-load_dotenv()
-TOKEN = os.getenv("DISCORD_TOKEN")
-SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
-SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
-
+# acessing env keys from heroku
+TOKEN = os.environ["DISCORD_TOKEN"]
+SPOTIFY_CLIENT_ID = os.environ["SPOTIFY_CLIENT_ID"]
+SPOTIFY_CLIENT_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
 
 # Spotify Authentication
 spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
