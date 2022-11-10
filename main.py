@@ -16,15 +16,21 @@ from discord.ext import commands
 # SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 # acessing env keys from heroku
-TOKEN = os.environ["DISCORD_TOKEN"]
-SPOTIFY_CLIENT_ID = os.environ["SPOTIFY_CLIENT_ID"]
-SPOTIFY_CLIENT_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
+print("Accessing env keys....")
+try:
+    TOKEN = os.environ["DISCORD_TOKEN"]
+    SPOTIFY_CLIENT_ID = os.environ["SPOTIFY_CLIENT_ID"]
+    SPOTIFY_CLIENT_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
+    print("env keys Accessed")
+except Exception as e:
+    print(Exception)
 
 # Spotify Authentication
 spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
     client_id=SPOTIFY_CLIENT_ID,
     client_secret=SPOTIFY_CLIENT_SECRET
 ))
+print("Connected to spotify")
 
 # values to help with category mapping for spotify api
 category_id_mapping = {
@@ -116,19 +122,15 @@ def fetch_playlist(category_id: str):
     print(f"Playlist_uri: {playlist_uri}")
     return playlist_name, playlist_uri
 
-def create_embeded(name, uri):
-    embed = discord.Embed()
-    embed.title = name
-    embed.url = uri
-    return embed
 
 @client.command(
     name="recommend", 
     help="Recommends a music by analysing the emotion in the corresponding text. Please put the corresponding text in quotes"
     )
 async def recommend(ctx, text: str):
+    print("Detecting emotion.....")
     detected_emotion = detect_emotion(text)
-    print(detected_emotion)
+    print(f"Emotion detected: {detected_emotion}")
     match detected_emotion:
         case "Angry":
             category = random.choice(anger_generes)
@@ -140,6 +142,7 @@ async def recommend(ctx, text: str):
                 embed = discord.Embed(title=name, url=uri, description="I sense you are angry\nCalm out with this playlist", color=0xFF5733)
                 await ctx.send(embed=embed)
             except Exception as e:
+                print("Error occured when fetch playlist")
                 with open("err.log", "w") as log:
                     log.writelines(str(e.__class__) + "\n")
                 await ctx.send("I am having some internal issues, please try again or contact Abhinav")
@@ -155,6 +158,7 @@ async def recommend(ctx, text: str):
                 embed = discord.Embed(title=name, url=uri, description="You seems to be happy\nChill out with this playlist", color=0xFF5733)
                 await ctx.send(embed=embed)
             except Exception as e:
+                print("Error occured when fetch playlist")
                 with open("err.log", "w") as log:
                     log.writelines(str(e.__class__) + "\n")
                 await ctx.send("I am having some internal issues, please try again or contact Abhinav")
@@ -166,6 +170,7 @@ async def recommend(ctx, text: str):
                 embed = discord.Embed(title=name, url=uri, description="I feel like you are worried\nRelax with this playlist\nDon't hide your emotions, talk with a real person, please", color=0xFF5733)
                 await ctx.send(embed=embed)
             except Exception as e:
+                print("Error occured when fetch playlist")
                 with open("err.log", "w") as log:
                     log.writelines(str(e.__class__) + "\n")
                 await ctx.send("I am having some internal issues, please try again or contact Abhinav")
