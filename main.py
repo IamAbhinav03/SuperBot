@@ -8,7 +8,9 @@ import text2emotion as te
 from spotipy.oauth2 import SpotifyClientCredentials
 from dotenv import load_dotenv
 from discord.ext import commands
-
+# some nltk stuff
+import nltk
+nltk.download('omw-1.4')
 # accessing env keys from .env file
 # load_dotenv()
 # TOKEN = os.getenv("DISCORD_TOKEN")
